@@ -2,50 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Song Recommender UI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sonic DNA Recommender</title>
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Spotify uses Circular, Apple uses San Francisco. We'll use modern replacements -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Dynamic Animated Background Gradients mimicking Apple Music -->
+    <div class="gradient-bg">
+        <div class="blob-c" id="blob1"></div>
+        <div class="blob-c" id="blob2"></div>
+        <div class="blob-c" id="blob3"></div>
+        <div class="glass-overlay"></div>
+    </div>
+
     <div class="app-container">
-        <!-- Sidebar -->
-        <nav class="sidebar glass">
-            <h2>Recommendations</h2>
-            <ul>
-                <li><a href="#" class="active">Home</a></li>
-            </ul>
-        </nav>
         
-        <!-- Main Content -->
+        <!-- Header / Search -->
+        <header class="search-header">
+            <h1 class="logo">Sonic<span>DNA</span></h1>
+            <div class="search-box glass-panel">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-input" placeholder="Search for a track..." />
+                <button id="search-btn" class="icon-btn"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </header>
+
         <main class="main-content">
-            <header class="top-nav glass">
-                <input type="text" id="search-input" placeholder="What do you want to listen to?" />
-                <button id="search-btn">Search</button>
-            </header>
-            
-            <section class="results-area">
-                <h1 class="gradient-text">Discover New Sounds</h1>
-                <div id="loader" class="hidden">Finding your next favorite song...</div>
-                
-                <div class="cards-grid" id="recommendation-cards">
-                    <!-- Cards injected via JS -->
+            <div id="loader" class="hidden">
+                <div class="spinner"></div>
+                <p>Analyzing audio fingerprint...</p>
+            </div>
+
+            <!-- Target Match Container -->
+            <section id="match-section" class="hidden fade-in">
+                <h2 class="section-title">Seed Track</h2>
+                <div class="hero-card glass-panel">
+                    <div class="hero-art">
+                        <i class="fa-solid fa-music"></i>
+                    </div>
+                    <div class="hero-info">
+                        <h2 id="matched-song">Song Name</h2>
+                        <p id="matched-artist">Artist Name</p>
+                    </div>
+                    <button class="play-btn" id="hero-play"><i class="fa-solid fa-play"></i></button>
                 </div>
             </section>
+
+            <!-- Recommendations Container -->
+            <section id="recommendations-section" class="hidden slide-up">
+                <h2 class="section-title">Recommended by Audio Similarity</h2>
+                <div class="track-list" id="recommendation-list">
+                    <!-- Tracks injected via JS -->
+                </div>
+            </section>
+
         </main>
+
+        <!-- Hidden YouTube Player for Audio -->
+        <div id="youtube-player-container"></div>
         
-        <!-- Player -->
-        <footer class="player glass">
-            <div id="youtube-player-container">
-                <!-- YouTube iframe goes here -->
-            </div>
-            <div class="now-playing-info">
-                <h3 id="now-playing-title">Ready to Play</h3>
-                <p id="now-playing-artist">Search for a track</p>
-            </div>
-        </footer>
     </div>
-    
+
     <!-- YouTube IFRAME API -->
     <script src="https://www.youtube.com/iframe_api"></script>
     <script src="js/app.js"></script>

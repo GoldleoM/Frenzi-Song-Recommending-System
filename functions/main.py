@@ -10,7 +10,7 @@ if sys.version_info < (3, 11):
     except ImportError:
         pass
 
-from firebase_functions import https_fn
+# Removed firebase-functions imports for standard API hosting
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -51,7 +51,7 @@ def normalize_artist(a):
 app = FastAPI(title="Song Recommender API")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"], # For Render development, we start broad and can restrict later
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -618,6 +618,5 @@ def fetch_youtube_playback(req: PlayRequest):
     except Exception as e:
         return {"error": f"Playback error: {str(e)}"}
 
-@https_fn.on_request()
-def api(req: https_fn.Request) -> https_fn.Response:
-    return https_fn.asgi_app(app)(req)
+# Cloud function wrapper removed for standard ASGI hosting
+# To run locally or on Render: uvicorn main:app --host 0.0.0.0 --port 8000

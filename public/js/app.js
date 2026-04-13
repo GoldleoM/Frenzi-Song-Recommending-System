@@ -1,3 +1,25 @@
+// YouTube IFrame Player
+let ytPlayer;
+function onYouTubeIframeAPIReady() {
+    ytPlayer = new YT.Player('youtube-player-container', {
+        height: '0',
+        width: '0',
+        videoId: '',
+        playerVars: {
+            'autoplay': 1,
+            'controls': 0,
+            'playsinline': 1
+        },
+        events: {
+            'onReady': onPlayerReady
+        }
+    });
+}
+
+function onPlayerReady(event) {
+    console.log("YouTube Player is ready");
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const searchBtn = document.getElementById('search-btn');
     const searchInput = document.getElementById('search-input');
@@ -68,6 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderList(recommendations) {
+        recommendationList.innerHTML = '';
+        
         recommendations.forEach((rec, index) => {
             const item = document.createElement('div');
             item.className = 'track-item';
@@ -76,9 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="track-item-art"><i class="fa-solid fa-music"></i></div>
                 <div class="track-item-info">
                     <div class="track-item-title">${rec.track_name}</div>
-                    <div class="track-item-artist">${rec.artists}</div>
+                    <div class="track-item-artist">${rec.artists} <span style="opacity: 0.6; margin-left: 5px;">• ${rec.reason || 'Similar vibes'}</span></div>
                 </div>
-                <div class="track-item-match">${(rec.similarity * 100).toFixed(0)}%</div>
+                <div class="track-item-match">${rec.similarity_percent || (rec.similarity * 100).toFixed(0)}%</div>
             `;
             
             item.addEventListener('click', () => playOnYouTube(rec.track_name, rec.artists));
@@ -86,14 +110,75 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function playOnYouTube(trackName, artists) {
-        const searchString = `${trackName} ${artists} audio`;
-        const ytUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(searchString)}`;
-        window.open(ytUrl, '_blank');
+    const mediaPlayerBar = document.getElementById('media-player-bar');
+    const mediaTitle = document.getElementById('media-title');
+    const mediaArtist = document.getElementById('media-artist');
+    const mediaPlayPauseBtn = document.getElementById('media-play-pause');
+    const mediaArtIcon = document.getElementById('media-art-icon');
+    let isPlaying = false;
+
+    async function playOnYouTube(trackName, artists) {
+        // Show loading state in media bar
+        mediaPlayerBar.classList.remove('hidden');
+        mediaTitle.innerText = "Loading Audio...";
+        mediaArtist.innerText = `${trackName} • ${artists}`;
+        mediaArtIcon.className = "fa-solid fa-circle-notch fa-spin";
+        
+        try {
+            const response = await fetch('http://127.0.0.1:8000/play', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ track_name: trackName, artists: artists })
+            });
+            const data = await response.json();
+            
+            if (data.error) {
+                alert(data.error);
+                mediaTitle.innerText = "Error Loading";
+                mediaArtIcon.className = "fa-solid fa-music";
+                return;
+            }
+            
+            if (data.videoId && ytPlayer) {
+                mediaTitle.innerText = trackName;
+                mediaArtIcon.className = "fa-solid fa-music";
+                
+                ytPlayer.loadVideoById(data.videoId);
+                isPlaying = true;
+                updatePlayStateUI();
+            }
+        } catch (error) {
+            console.error(error);
+            mediaTitle.innerText = "Error";
+            mediaArtIcon.className = "fa-solid fa-music";
+        }
+    }
+
+    mediaPlayPauseBtn.addEventListener('click', () => {
+        if (!ytPlayer) return;
+        
+        if (isPlaying) {
+            ytPlayer.pauseVideo();
+            isPlaying = false;
+        } else {
+            ytPlayer.playVideo();
+            isPlaying = true;
+        }
+        updatePlayStateUI();
+    });
+
+    function updatePlayStateUI() {
+        if (isPlaying) {
+            mediaPlayPauseBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+            document.querySelector('.media-art').classList.add('spinning');
+            document.getElementById('media-progress-filled').style.width = "70%"; // Aesthetic fake progress
+        } else {
+            mediaPlayPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            document.querySelector('.media-art').classList.remove('spinning');
+        }
     }
 
     function shiftBackgroundColors(seedString) {
-        // Generate pseudo-random HSL colors based on the string
         let hash = 0;
         for (let i = 0; i < seedString.length; i++) {
             hash = seedString.charCodeAt(i) + ((hash << 5) - hash);

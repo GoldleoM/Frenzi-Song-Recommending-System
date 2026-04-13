@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sonic DNA Recommender</title>
+    <title>Frenzi</title>
     <link rel="stylesheet" href="css/style.css">
     <!-- Spotify uses Circular, Apple uses San Francisco. We'll use modern replacements -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
     <!-- Dynamic Animated Background Gradients mimicking Apple Music -->
     <div class="gradient-bg">
@@ -20,15 +24,15 @@
     </div>
 
     <div class="app-container">
-        
+
         <!-- Header / Search -->
         <header class="search-header">
-            <h1 class="logo">Sonic<span>DNA</span></h1>
-            <div class="search-box glass-panel">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="search-input" placeholder="Search for a track..." />
-                <button id="search-btn" class="icon-btn"><i class="fa-solid fa-arrow-right"></i></button>
-            </div>
+            <h1 class="logo">Frenzi<h1>
+                    <div class="search-box glass-panel">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="search-input" placeholder="Search for a track..." />
+                        <button id="search-btn" class="icon-btn"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
         </header>
 
         <main class="main-content">
@@ -62,13 +66,29 @@
 
         </main>
 
-        <!-- Hidden YouTube Player for Audio -->
-        <div id="youtube-player-container"></div>
-        
+        <!-- Floating Media Player Bar -->
+        <div id="media-player-bar" class="glass-panel hidden">
+            <div id="youtube-player-container" style="display: none;"></div>
+            <div class="media-info">
+                <div class="media-art"><i class="fa-solid fa-music" id="media-art-icon"></i></div>
+                <div class="media-text">
+                    <h3 id="media-title">Not Playing</h3>
+                    <p id="media-artist">--</p>
+                </div>
+            </div>
+            <div class="media-controls">
+                <button id="media-play-pause" class="icon-btn"><i class="fa-solid fa-play"></i></button>
+            </div>
+            <!-- Fake Progress bar for aesthetic -->
+            <div class="media-progress">
+                <div class="media-progress-filled" id="media-progress-filled"></div>
+            </div>
+        </div>
     </div>
 
     <!-- YouTube IFRAME API -->
     <script src="https://www.youtube.com/iframe_api"></script>
     <script src="js/app.js"></script>
 </body>
+
 </html>

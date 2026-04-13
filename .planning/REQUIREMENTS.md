@@ -4,28 +4,30 @@
 
 ### Data
 
-- [ ] **DATA-01**: Load `dataset.csv` (audio features) and `track_data_final.csv` (artist metadata), merge on `track_id` — keep only tracks present in both
-- [ ] **DATA-02**: Handle missing values, deduplicate tracks, clean genre strings
-- [ ] **DATA-03**: Engineer a unified feature vector per track: normalize numeric audio features (MinMaxScaler) + encode genre
+- [ ] **DATA-01**: Load and clean `dataset.csv` (audio features and genres) — handle deduplication and basic track identification
+- [ ] **DATA-02**: Handle missing values (drop rows with NaNs)
+- [ ] **DATA-03**: Engineer a unified feature vector per track: normalize numeric audio features (MinMaxScaler) + one-hot encode genre
 
 ### EDA
 
-- [ ] **EDA-01**: Visualize distribution of key audio features (danceability, energy, valence, tempo) with histograms/KDE plots
-- [ ] **EDA-02**: Correlation heatmap of all audio features
-- [ ] **EDA-03**: Genre distribution bar chart (top N genres)
-- [ ] **EDA-04**: Scatter plots showing feature clusters (e.g., energy vs. valence, colored by genre)
+- [x] **EDA-01**: Visualizations...
+- [x] **EDA-02**: Correlation heatmap...
+- [x] **EDA-03**: Genre distribution...
+- [x] **EDA-04**: Scatter plots...
 
-### Model
-
-- [ ] **MODEL-01**: Build cosine similarity matrix over normalized feature vectors (sklearn `cosine_similarity`)
-- [ ] **MODEL-02**: Implement `recommend(song_name, n=4)` — returns top-N most similar tracks with song name, artist, genre, similarity score
-- [ ] **MODEL-03**: Display recommendation output as a clean formatted / styled DataFrame
+### 3. Recommender Engine (Core Logic)
+- [x] Implementation of `manual_levenshtein` distance algorithm (dynamic programming) for typo-resistant search. [03.01]
+- [x] Recursive fallback search: substring match -> Levenshtein distance on Top 1k tracks. [03.01]
+- [x] On-the-fly similarity calculation using `cosine_similarity` for the searched song vs the full dataset. [03.02]
+- [x] Weighted similarity logic: `total_sim = 0.3 * audio_sim + 0.7 * genre_sim`. [03.02]
+- [x] Recommendation output includes Title, Artist, Similarity %, and human-readable Reason. [03.03]
+- [x] Final notebook narrative (student-toned) explaining the "why" behind the logic. [03.04]
 
 ### Evaluation & Polish
 
-- [ ] **EVAL-01**: Radar chart comparing input song vs. recommended songs across audio dimensions
-- [ ] **EVAL-02**: Calculate diversity score of the recommended queue (avg pairwise dissimilarity)
-- [ ] **EVAL-03**: Notebook is clean, student-toned markdown, well-structured — resume-ready
+- [x] **EVAL-01**: Radar chart comparing input song vs. recommended songs across audio dimensions
+- [x] **EVAL-02**: Calculate diversity score of the recommended queue
+- [x] **EVAL-03**: Notebook is clean, student-toned markdown, well-structured — resume-ready
 
 ---
 
@@ -33,6 +35,7 @@
 
 - User listening history / taste profile for personalization
 - Collaborative filtering (user-item matrix)
+- Merging with `track_data_final.csv` for artist/album context
 - Model persistence (`.pkl` export)
 - Interactive UI (Streamlit or ipywidgets)
 
@@ -51,13 +54,13 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| DATA-01 | — | pending |
-| DATA-02 | — | pending |
-| DATA-03 | — | pending |
-| EDA-01 | — | pending |
-| EDA-02 | — | pending |
-| EDA-03 | — | pending |
-| EDA-04 | — | pending |
+| DATA-01 | 01 | completed |
+| DATA-02 | 01 | completed |
+| DATA-03 | 01 | completed |
+| EDA-01 | 02 | completed |
+| EDA-02 | 02 | completed |
+| EDA-03 | 02 | completed |
+| EDA-04 | 02 | completed |
 | MODEL-01 | — | pending |
 | MODEL-02 | — | pending |
 | MODEL-03 | — | pending |

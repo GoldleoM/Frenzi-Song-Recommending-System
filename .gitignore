@@ -23,6 +23,7 @@ var/
 .venv
 venv/
 ENV/
+.planning/
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -30,3 +31,13 @@ ENV/
 # OS Files
 .DS_Store
 Thumbs.db
+
+# Project Specific
+.planning/
+GEMINI.md
+Untitled.ipynb
+dataset.csv
+scratch/
+*.joblib
+serviceAccountKey.json
+.firebase/

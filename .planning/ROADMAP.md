@@ -20,14 +20,14 @@
 
 ## Phase 1: Data Pipeline
 
-**Goal:** Load and merge `dataset.csv` + `track_data_final.csv`, clean the data, and engineer normalized feature vectors ready for similarity computation.
+**Goal:** Load and clean `dataset.csv`, handle missing values, and engineer normalized feature vectors with one-hot encoded genres.
 
 **Requirements:** DATA-01, DATA-02, DATA-03
 
 **Plans:**
-1. Load datasets → merge on `track_id` → inspect shape and dtypes
-2. Deduplicate, drop/impute nulls, clean genre strings (strip brackets, lowercase)
-3. Select audio feature columns, apply `MinMaxScaler`, encode genre with `LabelEncoder` or one-hot
+1. Load `dataset.csv` → inspect shape and dtypes
+2. Deduplicate, drop rows with NaNs, clean track names/artists
+3. Select audio feature columns, apply `MinMaxScaler`, apply one-hot encoding on `track_genre`
 
 **Success Criteria:**
 1. Merged DataFrame has no nulls in audio feature columns
@@ -99,6 +99,26 @@
 
 **UI hint:** no  
 **Depends on:** Phase 3
+
+### Phase 5: Convert model to API
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 4
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 5 to break down)
+
+### Phase 6: make a website
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 5
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 6 to break down)
 
 ---
 

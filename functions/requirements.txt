@@ -8,3 +8,5 @@ python-dotenv
 requests
 lyricsgenius
 firebase-admin
+uvicorn
+gunicorn

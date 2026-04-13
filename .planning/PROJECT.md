@@ -1,4 +1,4 @@
-# Song Recommender — Content-Based ML System
+y# Song Recommender — Content-Based ML System
 
 ## What This Is
 
@@ -25,17 +25,19 @@ Phase 1 focuses on content-based filtering using audio features (danceability, e
 
 ### Validated
 
-(None yet — ship to validate)
+- [Phase 1] Load and merge CSVs (audio + metadata)
+- [Phase 1] Feature engineering (scaling + encoding)
+- [Phase 2] EDA with seaborn/matplotlib
+- [Phase 3] `manual_levenshtein` fuzzy search
+- [Phase 3] On-the-fly similarity calculation
+- [Phase 3] Explainable recommendation output
+- [Phase 4] Intra-List Diversity (ILD) scoring
+- [Phase 4] Audio Profile Radar Charts
+- [Phase 4] Professional DataFrame Styling
 
 ### Active
 
-- [ ] Load and merge 3 CSVs meaningfully (audio features + artist metadata)
-- [ ] Perform thorough EDA with seaborn/matplotlib visualizations
-- [ ] Engineer features: normalize audio features, encode genre
-- [ ] Build content-based recommender using cosine similarity on feature vectors
-- [ ] Given an input song name, return a queue of 3–4 most similar songs
-- [ ] Evaluate recommendation quality (diversity, genre overlap, popularity spread)
-- [ ] Present full notebook with markdown explanations suitable for a resume
+(All v1 goals complete)
 
 ### Out of Scope (Phase 1)
 
@@ -48,12 +50,13 @@ Phase 1 focuses on content-based filtering using audio features (danceability, e
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Content-based (Phase 1) | No user history data available; audio features drive similarity | — Pending |
-| Cosine similarity | Interpretable, works well in high-dim feature space, sklearn-native | — Pending |
-| `dataset.csv` as primary | Has audio features (danceability, energy, valence, etc.) — the ML signal | — Pending |
-| Merge with `track_data_final.csv` | Adds artist context (popularity, genre) for richer feature vectors | — Pending |
-| Feature normalization (MinMaxScaler) | Audio features are on different scales; normalization is prerequisite for cosine similarity | — Pending |
-| Output: Jupyter Notebook | Resume-ready format; allows markdown narrative + code + visualizations inline | — Pending |
+| Content-based (Phase 1) | No user history data available; audio features drive similarity | — Validated |
+| Cosine similarity | Interpretable, works well in high-dim feature space, sklearn-native | — Validated |
+| `dataset.csv` as primary | Has audio features (danceability, energy, valence, etc.) — the ML signal | — Validated |
+| Merge with `track_data_final.csv` | Adds artist context (popularity, genre) for richer feature vectors | — Validated |
+| Feature normalization (MinMaxScaler) | Audio features are on different scales; normalization is prerequisite for cosine similarity | — Validated |
+| Output: Jupyter Notebook | Resume-ready format; allows markdown narrative + code + visualizations inline | — Validated |
+| Human-style writing | Git commits: short, lowercase, casual (e.g. "add cosine similarity", "fix genre encoding"). Notebook: student tone — concise markdown, natural comments, no AI prose patterns | — Validated |
 
 ## Evolution
 

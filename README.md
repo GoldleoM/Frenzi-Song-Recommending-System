@@ -1,3 +1,13 @@
+---
+title: Frenzi Song Recommender
+emoji: 🎵
+colorFrom: blue
+colorTo: purple
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # Frenzi — Audio DNA Song Recommender
 
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)

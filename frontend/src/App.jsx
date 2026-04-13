@@ -6,7 +6,7 @@ import './firebase';
 // Change this to your Render URL after deployment
 const API_BASE = import.meta.env.MODE === 'development' 
   ? '/api' 
-  : 'https://frenzi-api.onrender.com'; 
+  : 'https://frenzi-song-recommending-system.vercel.app'; 
 
 
 function App() {

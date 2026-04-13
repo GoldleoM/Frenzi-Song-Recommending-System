@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://us-central1-frenzi-22694.cloudfunctions.net/api',
+        target: 'https://frenzi-song-recommending-system.vercel.app',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }

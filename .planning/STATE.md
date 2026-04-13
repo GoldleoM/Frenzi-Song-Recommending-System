@@ -16,6 +16,7 @@
 | 3 | Recommender Engine | ✅ Complete |
 | 4 | Evaluation & Polish | ✅ Complete |
 | 5 | Convert model to API | ✅ Complete |
+| 6 | make a website | ✅ Complete |
 
 ## Decisions Log
 
@@ -29,3 +30,4 @@
 ### Roadmap Evolution
 
 - Phase 5 added: Convert model to API
+- Phase 6 added: make a website

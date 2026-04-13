@@ -1,6 +1,8 @@
 firebase-functions>=0.1.0
-fastapi
+fastapi[standard]
 scikit-learn
 pandas
 numpy
 joblib
+python-dotenv
+requests

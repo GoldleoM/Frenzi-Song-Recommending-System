@@ -1,0 +1,6 @@
+# Local ignores for Backend
+.env
+serviceAccountKey.json
+__pycache__/
+*.joblib
+recommender_data.joblib

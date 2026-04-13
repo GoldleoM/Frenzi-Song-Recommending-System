@@ -4,4 +4,3 @@ serviceAccountKey.json
 __pycache__/
 *.joblib
 recommender_data.joblib
-Dockerfile

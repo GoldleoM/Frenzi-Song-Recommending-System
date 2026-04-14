@@ -236,13 +236,23 @@ const thumbKey = (name, artist) => {
   // --- FETCH THUMBNAILS (BATCH & PERSIST) ---
   const fetchThumbnails = async (seed, recs) => {
     const allTracks = [];
-    if (seed) allTracks.push({ track_name: seed.name, artists: seed.artist });
-    if (recs) recs.forEach(r => allTracks.push({ track_name: r.track_name, artists: r.artists }));
+    if (seed) allTracks.push({ track_name: seed.name, artists: seed.artist, videoId: seed.videoId || null });
+    if (recs) recs.forEach(r => allTracks.push({ track_name: r.track_name, artists: r.artists, videoId: r.videoId || null }));
 
-    // Stagger the loading to prevent request drops
+    // Hydrate state immediately with video IDs already pulled from Firebase by the backend
+    const hydratedThumbs = {};
+    allTracks.forEach(t => {
+      if (t.videoId) hydratedThumbs[thumbKey(t.track_name, t.artists)] = t.videoId;
+    });
+    
+    if (Object.keys(hydratedThumbs).length > 0) {
+      setThumbnails(prev => ({ ...prev, ...hydratedThumbs }));
+    }
+
+    // Stagger the loading to prevent request drops for remaining tracks
     for (const t of allTracks) {
       const key = thumbKey(t.track_name, t.artists);
-      if (thumbnails[key] || fetchingIds.has(key)) continue;
+      if (thumbnails[key] || hydratedThumbs[key] || fetchingIds.has(key)) continue;
 
       setFetchingIds(prev => new Set(prev).add(key));
       

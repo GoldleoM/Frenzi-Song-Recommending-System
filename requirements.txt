@@ -1,0 +1,12 @@
+firebase-functions>=0.1.0
+fastapi[standard]
+scikit-learn
+pandas
+numpy
+joblib
+python-dotenv
+requests
+lyricsgenius
+firebase-admin
+uvicorn
+gunicorn

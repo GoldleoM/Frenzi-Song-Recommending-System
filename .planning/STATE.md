@@ -31,3 +31,9 @@
 
 - Phase 5 added: Convert model to API
 - Phase 6 added: make a website
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260414-j2a | connect youtube_cache and lyrics_cache via videoID | 2026-04-14 | pending | [260414-j2a-connect-youtube-cache-and-lyrics-cache-v](./quick/260414-j2a-connect-youtube-cache-and-lyrics-cache-v/) |

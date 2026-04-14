@@ -3,10 +3,9 @@ import YouTube from 'react-youtube';
 import { Search, Play, Pause, Disc3, ArrowRight, SkipForward, SkipBack, Volume2, VolumeX, ChevronDown, Radio, Music2, Sparkles, Monitor, Image as ImageIcon, AlignLeft } from 'lucide-react';
 import './firebase';
  
-// Change this to your Render URL after deployment
 const API_BASE = import.meta.env.MODE === 'development' 
   ? '/api' 
-  : 'https://frenzi-song-recommending-system.vercel.app'; 
+  : 'https://goldleom-frenzi-song-recommender.hf.space'; 
 
 
 function App() {
@@ -556,7 +555,8 @@ const thumbKey = (name, artist) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           track_name: playingTrack.name, 
-          artist: playingTrack.artist 
+          artist: playingTrack.artist,
+          videoId: youtubeId
         })
       });
       const data = await res.json();

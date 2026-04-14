@@ -51,7 +51,11 @@ def normalize_artist(a):
 app = FastAPI(title="Song Recommender API")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # For Render development, we start broad and can restrict later
+    allow_origins=[
+        "https://frenzi-22694.web.app",  # your production frontend
+        "http://localhost:5173",         # your local development frontend
+        "http://127.0.0.1:5173"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -66,6 +70,7 @@ class RecommendRequest(BaseModel):
 class LyricsRequest(BaseModel):
     track_name: str
     artist: str
+    videoId: str = None
 
 class ExternalRecommendRequest(BaseModel):
     song_name: str
@@ -452,7 +457,43 @@ def search_suggestions(q: str = "", limit: int = 8):
 
 @app.post("/lyrics")
 def fetch_lyrics(req: LyricsRequest):
-    """Fetches full lyrics from Genius on-demand."""
+    """Fetches full lyrics from Genius on-demand or Cache."""
+    norm_track = normalize_string_for_cache(req.track_name)
+    norm_artist = normalize_string_for_cache(req.artist)
+    
+    query = f"{norm_track} {norm_artist} lyrics"
+    doc_id = hashlib.md5(query.encode('utf-8')).hexdigest()
+    
+    # 1. Try Memory Cache
+    if doc_id in LYRICS_CACHE:
+        return LYRICS_CACHE[doc_id]
+        
+    # 2. Try Firestore Cache
+    if FIRESTORE_AVAILABLE:
+        try:
+            doc_ref = db.collection('lyrics_cache').document(doc_id)
+            doc_snap = doc_ref.get()
+            if doc_snap.exists:
+                data = doc_snap.to_dict()
+                # To make sure it matches expected return
+                res = {
+                    "track_name": data.get("track_name", req.track_name),
+                    "artist": data.get("artist", req.artist),
+                    "lyrics": data.get("lyrics", ""),
+                    "source": "firestore",
+                    "url": data.get("url", "")
+                }
+                LYRICS_CACHE[doc_id] = res
+                return res
+        except Exception as e:
+            print(f"Firestore read error: {e}")
+
+    # 3. Check environment
+    is_production = os.environ.get("SPACE_ID") is not None or os.name != 'nt'
+    if is_production:
+        return {"error": "Lyrics not available for this song."}
+
+    # 4. Fetch from Genius
     token = os.environ.get("GENIUS_ACCESS_TOKEN")
     if not token or token == "PASTE_YOUR_TOKEN_HERE":
         return {"error": "Genius API Access Token missing. Add it to .env in the functions/ folder."}
@@ -480,13 +521,31 @@ def fetch_lyrics(req: LyricsRequest):
         cleaned = re.sub(r'Embed$', '', cleaned)            # Remove trailing "Embed"
         cleaned = re.sub(r'[0-9]*Embed$', '', cleaned)       # Sometimes it's number-Embed
         
-        return {
+        result = {
             "track_name": song.title,
             "artist": song.artist,
             "lyrics": cleaned,
             "source": "genius",
             "url": song.url
         }
+        
+        # Save to cache
+        LYRICS_CACHE[doc_id] = result
+        
+        if FIRESTORE_AVAILABLE:
+            try:
+                db.collection('lyrics_cache').document(doc_id).set({
+                    **result,
+                    'query': query,
+                    'raw_track': req.track_name,
+                    'raw_artist': req.artist,
+                    'videoId': req.videoId,
+                    'timestamp': firestore.SERVER_TIMESTAMP
+                })
+            except Exception as e:
+                print(f"Firestore write error: {e}")
+                
+        return result
     except Exception as e:
         print(f"Lyrics Error: {e}")
         return {"error": f"Failed to fetch lyrics: {str(e)}"}
@@ -513,6 +572,7 @@ except Exception as e:
     db = None
 
 PLAY_CACHE = {}
+LYRICS_CACHE = {}
 
 class PlayRequest(BaseModel):
     track_name: str
